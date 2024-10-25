@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propose Spending</title>
+                <meta name="description" content="Proposing an expenditure.">
+        <link rel="apple-touch-icon" sizes="180x180" href="romogi-favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="romogi-favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="romogi-favicons/favicon-16x16.png">
+    <link rel="manifest" href="romogi-favicons/site.webmanifest">
+    <link rel="shortcut icon" href="romogi-favicons/favicon.ico" type="image/x-icon" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: rgb(220, 220, 220);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #spendingContainer {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input[type="number"], input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+        #submitButton {
+            padding: 10px 30px;
+            font-size: 18px;
+            background-color: rgb(70, 130, 180);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #submitButton:hover {
+            background-color: rgb(60, 120, 170);
+        }
+        #errorMessage {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="spendingContainer">
+        <h1>I propose that we spend:</h1>
+        <input type="number" id="amountInput" placeholder="Enter amount in dollars">
+        <h1>on:</h1>
+        <input type="text" id="purposeInput" placeholder="Enter purpose">
+        <br>
+        <button id="submitButton" onclick="submitProposal()">SUBMIT</button>
+        <p id="responseMessage"></p>
+        <p id="errorMessage"></p>
+    </div>
+
+    <script>
+        function submitProposal() {
+            const amount = document.getElementById('amountInput').value;
+            const purpose = document.getElementById('purposeInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const responseMessage = document.getElementById('responseMessage');
+
+            if (amount && purpose) {
+                responseMessage.textContent = "You proposed to spend $" + amount + " on " + purpose + ". Results will be shown in 24 hours.";
+                errorMessage.textContent = "";
+            } else {
+                errorMessage.textContent = "Please enter both the amount and the purpose.";
+                responseMessage.textContent = "";
+            }
+        }
+    </script>
+</body>
+</html>

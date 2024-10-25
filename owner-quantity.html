@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote on Business Owners</title>
+            <meta name="description" content="Voting on business owners.">
+        <link rel="apple-touch-icon" sizes="180x180" href="romogi-favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="romogi-favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="romogi-favicons/favicon-16x16.png">
+    <link rel="manifest" href="romogi-favicons/site.webmanifest">
+    <link rel="shortcut icon" href="romogi-favicons/favicon.ico" type="image/x-icon" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: rgb(220, 220, 220);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #voteContainer {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .voteButton {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .voteButton:hover {
+            background-color: rgb(200, 200, 200);
+        }
+        #submitButton {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 18px;
+            background-color: rgb(70, 130, 180);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #submitButton:hover {
+            background-color: rgb(60, 120, 170);
+        }
+    </style>
+</head>
+<body>
+    <div id="voteContainer">
+        <h1>I propose for the quantity of my country’s business owners to:</h1>
+        <button class="voteButton" onclick="selectVote(1)">+1</button>
+        <button class="voteButton" onclick="selectVote(0)">±0</button>
+        <button class="voteButton" onclick="selectVote(-1)">-1</button>
+        <br>
+        <button id="submitButton" onclick="submitVote()">VOTE</button>
+        <p id="voteMessage"></p>
+    </div>
+
+    <script>
+        let selectedVote = null;
+
+        function selectVote(value) {
+            selectedVote = value;
+            document.getElementById('voteMessage').textContent = "You selected: " + (value === 1 ? "+1" : value === 0 ? "±0" : "-1");
+        }
+
+        function submitVote() {
+            if (selectedVote !== null) {
+                document.getElementById('voteMessage').textContent = "Vote recorded. Results will be shown in 24 hours.";
+            } else {
+                document.getElementById('voteMessage').textContent = "Please select an option before submitting your vote.";
+            }
+        }
+    </script>
+</body>
+</html>

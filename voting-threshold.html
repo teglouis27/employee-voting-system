@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Voting for voting threshold to make a decision.">
+    <link rel="apple-touch-icon" sizes="180x180" href="romogi-favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="romogi-favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="romogi-favicons/favicon-16x16.png">
+    <link rel="manifest" href="romogi-favicons/site.webmanifest">
+    <link rel="shortcut icon" href="romogi-favicons/favicon.ico" type="image/x-icon" />
+    <title>Propose Voting Threshold</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: rgb(220, 220, 220);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #voteContainer {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+        #submitButton {
+            padding: 10px 30px;
+            font-size: 18px;
+            background-color: rgb(70, 130, 180);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #submitButton:hover {
+            background-color: rgb(60, 120, 170);
+        }
+        #errorMessage {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="voteContainer">
+        <h1>I propose that the number of votes needed for change is:</h1>
+        <p>\( \frac{ \text{numerator} }{ \text{#business owners} } \)</p>
+        <input type="number" id="numeratorInput" placeholder="Enter the numerator" min="1" step="1">
+        <br>
+        <button id="submitButton" onclick="submitThreshold()">SUBMIT</button>
+        <p id="responseMessage"></p>
+        <p id="errorMessage"></p>
+    </div>
+
+    <script>
+        const numBusinessOwners = 10; // Assume the number of business owners is provided
+
+        function calculateMinNumerator(n) {
+            return (1 / 4) * Math.pow(-1, n) * ((Math.pow(-1, n) * (2 * n + 3)) + 1);
+        }
+
+        function submitThreshold() {
+            const numerator = parseInt(document.getElementById('numeratorInput').value);
+            const errorMessage = document.getElementById('errorMessage');
+            const responseMessage = document.getElementById('responseMessage');
+
+            const minNumerator = calculateMinNumerator(numBusinessOwners);
+            const maxNumerator = numBusinessOwners;
+
+            if (numerator && numerator >= minNumerator && numerator <= maxNumerator) {
+                responseMessage.textContent = `You proposed that the number of votes needed for change is: \\( \\frac{${numerator}}{${numBusinessOwners}} \\).`;
+                errorMessage.textContent = "";
+                MathJax.typeset();  // Re-render the MathJax expression
+            } else {
+                errorMessage.textContent = `Please enter a numerator between ${Math.floor(minNumerator)} and ${maxNumerator}.`;
+                responseMessage.textContent = "";
+            }
+        }
+    </script>
+</body>
+</html>

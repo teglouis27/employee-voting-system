@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Question</title>
+        <meta name="description" content="This is to propose an additional question for the next meeting to be polled on.">
+    <link rel="apple-touch-icon" sizes="180x180" href="romogi-favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="romogi-favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="romogi-favicons/favicon-16x16.png">
+    <link rel="manifest" href="romogi-favicons/site.webmanifest">
+    <link rel="shortcut icon" href="romogi-favicons/favicon.ico" type="image/x-icon" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: rgb(220, 220, 220);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #questionContainer {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+        #submitButton {
+            padding: 10px 30px;
+            font-size: 18px;
+            background-color: rgb(70, 130, 180);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #submitButton:hover {
+            background-color: rgb(60, 120, 170);
+        }
+        #responseMessage {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="questionContainer">
+        <h1>I want to ask if:</h1>
+        <input type="text" id="questionInput" placeholder="Enter your question">
+        <br>
+        <button id="submitButton" onclick="submitQuestion()">SUBMIT</button>
+        <p id="responseMessage"></p>
+    </div>
+
+    <script>
+        function submitQuestion() {
+            const question = document.getElementById('questionInput').value;
+            const responseMessage = document.getElementById('responseMessage');
+
+            if (question.trim() !== "") {
+                responseMessage.textContent = `You asked: "${question}?"`;
+            } else {
+                responseMessage.textContent = "Please enter a valid question.";
+            }
+        }
+    </script>
+</body>
+</html>
