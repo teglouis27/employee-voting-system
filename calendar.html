@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar with Clock</title>
+<style type="text/css">
+html,
+body {
+   margin: 0;
+   padding: 0;
+   height: 100%;
+   overflow: hidden;
+   font-size: 12px;
+   font-weight: bold;
+   font-family: arial;
+}
+
+.container {
+   min-height: 100%;
+   position: relative;
+}
+
+.clock-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 5px;
+      z-index: 200;
+}
+
+.box {
+   color: black;
+   position: absolute;
+   display: flex;
+   align-items: center;
+   left: 10%;
+   right: 10%;
+   top: -7.5%;
+   bottom: 10%;
+   text-align: center;
+   width: 80%;
+   height: 80%;
+   background: transparent;
+   min-width: 80%;
+   z-index: 0;
+}
+
+.tablenest {
+   height: 80%;
+   width: 100%;
+   display: inline-block;
+   vertical-align: center;
+   position: absolute;
+   text-align: center;
+   margin: 0 auto;
+   background-color: white;
+}
+
+.CalendarTable {
+   display: table;
+   border-collapse: collapse;
+   margin-left: auto;
+   margin-right: auto;
+   box-shadow: 5px 5px 10px #999;
+   background-color: white;
+   width: 100%;
+}
+
+.CalendarTableRow {
+   display: table-row;
+}
+
+.CalendarHeaderCell {
+   display: table-cell;
+   border: 2px solid #000;
+   height: 40px;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+   color: black;
+   background-color: #f0f0f0;
+   font-size: 1.5em;
+}
+
+.CalendarCell {
+   display: table-cell;
+   border: 2px solid #000;
+   height: 80px;
+   width: 100px;
+   min-width: 50px;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+   color: black;
+   background-color: white;
+}
+
+.GrayCalendarCell {
+   display: table-cell;
+   border: 2px solid #000;
+   height: 80px;
+   width: 100px;
+   min-width: 50px;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+   color: #a0a0a0;
+   background-color: #f9f9f9;
+}
+
+.ButtonTableRow {
+   display: table-row;
+}
+
+.ButtonCell {
+   display: table-cell;
+   border: 2px solid #000;
+   height: 60px;
+   text-align: center;
+   vertical-align: middle;
+   background-color: #f0f0f0;
+   padding: 0;
+}
+
+.greencss3button {
+   font-size: 14px;
+   font-weight: bold;
+   font-family: arial;
+   color: black;
+   padding: 10px;
+   background: #e0e0e0;
+   border-radius: 10px;
+   border: 1px solid #b0b0b0;
+   box-shadow:
+      5px 5px 15px rgba(0, 0, 0, 0.15),
+      -5px -5px 15px rgba(255, 255, 255, 0.8);
+   text-shadow:
+      0px -.5px 0px rgba(100,100,100,0.4),
+      0px .5px 0px rgba(200,200,200,0.4);
+   cursor: pointer;
+   margin: 0;
+   transition: all 0.2s ease;
+   width: calc(100% - 20px);
+}
+
+.greencss3button:active {
+   box-shadow:
+      inset 5px 5px 15px rgba(0, 0, 0, 0.15),
+      inset -5px -5px 15px rgba(255, 255, 255, 0.8);
+}
+</style>
+</head>
+<body>
+<!-- Clock SVG -->
+<div class="clock-container">
+   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+      <!-- Clock face -->
+      <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="2"/>
+
+      <!-- Group for tick marks -->
+      <g id="tickMarks"></g>
+
+      <script type="application/ecmascript">
+         window.addEventListener('load', function() {
+            const tickMarks = document.getElementById('tickMarks');
+            for (let i = 0; i < 60; i++) {
+               const angle = (i * 6) * Math.PI / 180;
+               const x = 50 + 45 * Math.cos(angle);
+               const y = 50 + 45 * Math.sin(angle);
+               const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+               circle.setAttribute('cx', x);
+               circle.setAttribute('cy', y);
+               circle.setAttribute('r', i % 5 === 0 ? 1.5 : 1); // Larger radius for hour marks
+               circle.setAttribute('fill', 'black');
+               tickMarks.appendChild(circle);
+            }
+
+            // Function to update clock hands based on UTC time
+            function getUTCTime() {
+               const now = new Date();
+               const hours = now.getUTCHours();
+               const minutes = now.getUTCMinutes();
+               const seconds = now.getUTCSeconds();
+
+               // Calculate rotation angles
+               const hourAngle = (hours % 12) * 30 + minutes * 0.5; // 30 degrees per hour + 0.5 degrees per minute
+               const minuteAngle = minutes * 6 + seconds * 0.1; // 6 degrees per minute + 0.1 degrees per second
+               const secondAngle = seconds * 6; // 6 degrees per second
+
+               // Rotate clock hands
+               document.getElementById('hourHand').setAttribute('transform', `rotate(${hourAngle}, 50, 50)`);
+               document.getElementById('minuteHand').setAttribute('transform', `rotate(${minuteAngle}, 50, 50)`);
+               document.getElementById('secondHand').setAttribute('transform', `rotate(${secondAngle}, 50, 50)`);
+            }
+
+            // Initial call to set clock hands
+            getUTCTime();
+
+            // Update clock hands every second
+            setInterval(getUTCTime, 1000);
+         });
+      </script>
+
+      <!-- Hands -->
+      <!-- Hour hand -->
+      <path id="hourHand" d="M50 50 L50 30" stroke="black" stroke-width="3"/>
+      
+      <!-- Minute hand -->
+      <path id="minuteHand" d="M50 50 L50 20" stroke="black" stroke-width="2"/>
+      
+      <!-- Second hand -->
+      <path id="secondHand" d="M50 50 L50 15" stroke="red" stroke-width="1"/>
+
+      <!-- Center dot -->
+      <circle cx="50" cy="50" r="1" fill="black"/>
+   </svg>
+</div>
+
+<!-- This is for the Calendar page-->
+<div class="container">
+   <div class="box">
+      <div class="tablenest">
+         <table class="CalendarTable">
+            <tr class="CalendarTableRow">
+               <td class="CalendarHeaderCell" colspan="7" id="calendarHeader">December 2024</td>
+            </tr>
+            <tr class="CalendarTableRow">
+               <td class="CalendarHeaderCell">Sunday</td>
+               <td class="CalendarHeaderCell">Monday</td>
+               <td class="CalendarHeaderCell">Tuesday</td>
+               <td class="CalendarHeaderCell">Wednesday</td>
+               <td class="CalendarHeaderCell">Thursday</td>
+               <td class="CalendarHeaderCell">Friday</td>
+               <td class="CalendarHeaderCell">Saturday</td>
+            </tr>
+            <tbody id="calendarBody">
+            </tbody>
+            <tr class="ButtonTableRow">
+               <td class="ButtonCell" colspan="2">
+                  <button class="greencss3button" onclick="previousMonth()">Previous Month</button>
+               </td>
+               <td class="ButtonCell" colspan="3">
+                  <button class="greencss3button" onclick="changeTimeZone()">Change Time Zone</button>
+               </td>
+               <td class="ButtonCell" colspan="2">
+                  <button class="greencss3button" onclick="nextMonth()">Next Month</button>
+               </td>
+            </tr>
+         </table>
+      </div>
+   </div>
+</div>
+<script>
+let currentMonth = 11; // December (0-indexed)
+let currentYear = 2024;
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function updateCalendarHeader() {
+   document.getElementById("calendarHeader").innerText = `${monthNames[currentMonth]} ${currentYear}`;
+}
+
+function updateCalendarDays() {
+   const calendarBody = document.getElementById("calendarBody");
+   calendarBody.innerHTML = "";
+
+   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+   let row = document.createElement("tr");
+   let day = 1;
+
+   // Previous month's days in light gray
+   for (let i = 0; i < firstDay; i++) {
+      const cell = document.createElement("td");
+      cell.className = "GrayCalendarCell";
+      cell.innerText = daysInPrevMonth - firstDay + 1 + i;
+      row.appendChild(cell);
+   }
+
+   // Current month's days
+   for (let i = firstDay; i < 7; i++) {
+      const cell = document.createElement("td");
+      cell.className = "CalendarCell";
+      cell.innerText = day;
+      row.appendChild(cell);
+      day++;
+   }
+   calendarBody.appendChild(row);
+
+   // Remaining weeks
+   while (day <= daysInMonth) {
+      row = document.createElement("tr");
+      for (let i = 0; i < 7; i++) {
+         if (day > daysInMonth) {
+            const nextMonthDay = day - daysInMonth;
+            const cell = document.createElement("td");
+            cell.className = "GrayCalendarCell";
+            cell.innerText = nextMonthDay;
+            row.appendChild(cell);
+            day++;
+         } else {
+            const cell = document.createElement("td");
+            cell.className = "CalendarCell";
+            cell.innerText = day;
+            row.appendChild(cell);
+            day++;
+         }
+      }
+      calendarBody.appendChild(row);
+   }
+}
+
+function nextMonth() {
+   currentMonth++;
+   if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+   }
+   updateCalendarHeader();
+   updateCalendarDays();
+}
+
+function previousMonth() {
+   currentMonth--;
+   if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+   }
+   updateCalendarHeader();
+   updateCalendarDays();
+}
+
+function changeTimeZone() {
+   alert("Change Time Zone functionality is not yet implemented.");
+}
+
+updateCalendarHeader();
+updateCalendarDays();
+</script>
+</body>
+</html>

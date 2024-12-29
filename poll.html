@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polling Results</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.header {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.polling-results {
+    width: 80%;
+    max-width: 800px;
+}
+
+.result-item {
+    margin-bottom: 30px;
+}
+
+.question {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    font-weight: bold;
+}
+
+.option {
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">Polling Results</div>
+    <div class="polling-results" id="pollingResults">
+        <!-- Results will be dynamically added here -->
+    </div>
+</div>
+<script>
+// Sample polling data
+const pollingData = [
+    {
+        question: "I nominate ________ to become a business owner."
+    },
+    {
+        question: "I propose ________ to no longer be a business owner starting from the next meeting."
+    },
+    {
+        question: "I propose that our next election will be in ____ weeks (1 week to 24 weeks) for the 24-hour period starting at UTC 00:00:00."
+    },
+    {
+        question: "I propose that we spend $_______ on _______."
+    },
+    {
+        question: "I propose to add the software feature: ________."
+    },
+    {
+        question: "I propose that the number of votes needed for change is greater than or equal to ____."
+    },
+    {
+        question: "I want to ask if: _____?"
+    }
+];
+
+// Function to generate random votes percentage
+function generateRandomPercentage() {
+    return Math.floor(Math.random() * 101);
+}
+
+// Function to render polling results
+function renderPollingResults() {
+    const pollingResultsContainer = document.getElementById('pollingResults');
+    pollingData.forEach(data => {
+        const resultItem = document.createElement('div');
+        resultItem.className = 'result-item';
+
+        // Question
+        const questionElement = document.createElement('div');
+        questionElement.className = 'question';
+        questionElement.innerText = data.question;
+        resultItem.appendChild(questionElement);
+
+        // Bar container
+        const barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
+        
+        // Bar
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const percentage = generateRandomPercentage();
+        bar.style.width = `${percentage}%`;
+        bar.style.backgroundColor = 'black';
+        bar.innerText = `${percentage}%`;
+        barContainer.appendChild(bar);
+
+        // Append bar to result item
+        resultItem.appendChild(barContainer);
+
+        pollingResultsContainer.appendChild(resultItem);
+    });
+}
+
+// Render polling results on page load
+renderPollingResults();
+</script>
+</body>
+</html>

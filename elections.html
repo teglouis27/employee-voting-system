@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polling Results</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.left-half {
+    width: 33.3333%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-half {
+    width: 66.6666%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.polling-results-container {
+    width: 80%;
+    height: 77.5%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.election-times-container {
+    width: 80%;
+    height: 77.5%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.polling-results {
+    width: 100%;
+}
+
+.result-item {
+    margin-bottom: 20px;
+}
+
+.question {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+.option {
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="left-half">
+        <div class="polling-results-container">
+            <div class="header">Polling Results</div>
+            <div class="polling-results" id="pollingResults">
+                <!-- Results will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+        <div class="right-half">
+        <div class="election-times-container">
+            <div class="header">Election Times</div>
+        </div>
+    </div>
+</div>
+<script>
+// Sample polling data
+const pollingData = [
+    {
+        question: "I nominate ________ to become a business owner."
+    },
+    {
+        question: "I propose ________ to no longer be a business owner starting from the next meeting."
+    },
+    {
+        question: "I propose that our next election will be every ____ weeks for the 24-hour period starting at UTC 00:00:00."
+    },
+    {
+        question: "I propose that we spend $_______ on _______."
+    },
+    {
+        question: "I propose to add the software feature: ________."
+    },
+    {
+        question: "I propose that the number of votes needed for change is greater than or equal to ____."
+    },
+    {
+        question: "I want to ask if: _____?"
+    }
+];
+
+// Function to generate random votes percentage
+function generateRandomPercentage() {
+    return Math.floor(Math.random() * 101);
+}
+
+// Function to render polling results
+function renderPollingResults() {
+    const pollingResultsContainer = document.getElementById('pollingResults');
+    pollingData.forEach(data => {
+        const resultItem = document.createElement('div');
+        resultItem.className = 'result-item';
+
+        // Question
+        const questionElement = document.createElement('div');
+        questionElement.className = 'question';
+        questionElement.innerText = data.question;
+        resultItem.appendChild(questionElement);
+
+        // Bar container
+        const barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
+        
+        // Bar
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const percentage = generateRandomPercentage();
+        bar.style.width = `${percentage}%`;
+        bar.style.backgroundColor = 'black';
+        bar.innerText = `${percentage}%`;
+        barContainer.appendChild(bar);
+
+        // Append bar to result item
+        resultItem.appendChild(barContainer);
+
+        pollingResultsContainer.appendChild(resultItem);
+    });
+}
+
+// Render polling results on page load
+renderPollingResults();
+</script>
+</body>
+</html>

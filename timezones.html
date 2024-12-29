@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Time Zone</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.0.1/luxon.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            position: relative;
+        }
+        #changeTimeZoneBtn {
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 15px 30px;
+        }
+        #timeZoneDropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% - 1px);
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            font-size: 1em;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: max-content;
+            animation: dropdownUnfurl 0.4s ease-out;
+        }
+        #timeZoneDropdown div:hover {
+            background-color: #e0e0e0;
+        }
+        @keyframes dropdownUnfurl {
+            0% {
+                max-height: 0;
+                opacity: 0;
+                transform: scaleY(0.8);
+            }
+            100% {
+                max-height: 500px;
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="changeTimeZoneBtn">Change Time Zone</button>
+        <div id="timeZoneDropdown">
+            <!-- Time zone options will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        const DateTime = luxon.DateTime;
+        const timeZoneBtn = document.getElementById('changeTimeZoneBtn');
+        const timeZoneDropdown = document.getElementById('timeZoneDropdown');
+
+        timeZoneBtn.addEventListener('click', () => {
+            if (timeZoneDropdown.style.display === 'none' || timeZoneDropdown.style.display === '') {
+                populateTimeZones();
+                timeZoneDropdown.style.display = 'block';
+                timeZoneDropdown.style.animation = 'dropdownUnfurl 0.4s ease-out';
+            } else {
+                timeZoneDropdown.style.display = 'none';
+            }
+        });
+
+        // Populate the dropdown menu with time zones and their current times
+        function populateTimeZones() {
+            // Clear the dropdown first
+            timeZoneDropdown.innerHTML = '';
+
+            // Get a list of all 38 distinct time zones
+            let timeZones = [
+                { name: 'Pacific/Kiritimati', city: 'Kiritimati, Kiribati' },
+                { name: 'Pacific/Chatham', city: 'Chatham Islands, New Zealand' },
+                { name: 'Pacific/Auckland', city: 'Auckland, New Zealand' },
+                { name: 'Australia/Sydney', city: 'Sydney, Australia' },
+                { name: 'Asia/Vladivostok', city: 'Vladivostok, Russia' },
+                { name: 'Asia/Tokyo', city: 'Tokyo, Japan' },
+                { name: 'Asia/Ulaanbaatar', city: 'Ulaanbaatar, Mongolia' },
+                { name: 'Asia/Bangkok', city: 'Bangkok, Thailand' },
+                { name: 'Asia/Yangon', city: 'Yangon, Myanmar' },
+                { name: 'Asia/Dhaka', city: 'Dhaka, Bangladesh' },
+                { name: 'Asia/Kathmandu', city: 'Kathmandu, Nepal' },
+                { name: 'Asia/Kolkata', city: 'Kolkata, India' },
+                { name: 'Asia/Karachi', city: 'Karachi, Pakistan' },
+                { name: 'Asia/Dubai', city: 'Dubai, UAE' },
+                { name: 'Asia/Tehran', city: 'Tehran, Iran' },
+                { name: 'Europe/Moscow', city: 'Moscow, Russia' },
+                { name: 'Europe/London', city: 'London, UK' },
+                { name: 'UTC', city: 'UTC' },
+                { name: 'Atlantic/Azores', city: 'Azores, Portugal' },
+                { name: 'America/Noronha', city: 'Fernando de Noronha, Brazil' },
+                { name: 'America/Argentina/Buenos_Aires', city: 'Buenos Aires, Argentina' },
+                { name: 'America/New_York', city: 'New York, USA' },
+                { name: 'America/Chicago', city: 'Chicago, USA' },
+                { name: 'America/Denver', city: 'Denver, USA' },
+                { name: 'America/Los_Angeles', city: 'Los Angeles, USA' },
+                { name: 'America/Anchorage', city: 'Anchorage, USA' },
+                { name: 'Pacific/Honolulu', city: 'Honolulu, USA' },
+                { name: 'Pacific/Pago_Pago', city: 'Pago Pago, American Samoa' }
+            ];
+
+            // Sort time zones by current time in each zone
+            timeZones = timeZones.map(zone => {
+                const currentTime = DateTime.now().setZone(zone.name);
+                return {
+                    ...zone,
+                    currentTime,
+                    formattedTime: currentTime.toLocaleString(DateTime.DATETIME_MED)
+                };
+            }).sort((a, b) => a.currentTime - b.currentTime);
+
+            // Populate the dropdown
+            timeZones.forEach(zone => {
+                const option = document.createElement('div');
+                option.value = zone.name;
+                option.textContent = `${zone.city} - ${zone.formattedTime}`;
+                option.style.cursor = 'pointer';
+                option.style.padding = '10px';
+                option.style.whiteSpace = 'nowrap';
+                option.style.borderBottom = '1px solid #ccc';
+                option.addEventListener('click', () => {
+                    timeZoneDropdown.style.display = 'none';
+                });
+                timeZoneDropdown.appendChild(option);
+            });
+        }
+    </script>
+</body>
+</html>

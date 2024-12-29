@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>SVG Clock</title>
+    <meta name="description" content="This webpage is an SVG clock in UTC.">
+    <link rel="apple-touch-icon" sizes="180x180" href="romogi-favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="romogi-favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="romogi-favicons/favicon-16x16.png">
+    <link rel="manifest" href="romogi-favicons/site.webmanifest">
+    <link rel="shortcut icon" href="romogi-favicons/favicon.ico" type="image/x-icon" />
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Clock face -->
+    <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="2"/>
+
+    <!-- Group for tick marks -->
+    <g id="tickMarks"></g>
+
+    <script type="application/ecmascript">
+      window.addEventListener('load', function() {
+        const tickMarks = document.getElementById('tickMarks');
+        for (let i = 0; i < 60; i++) {
+          const angle = (i * 6) * Math.PI / 180;
+          const x = 50 + 45 * Math.cos(angle);
+          const y = 50 + 45 * Math.sin(angle);
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', x);
+          circle.setAttribute('cy', y);
+          circle.setAttribute('r', i % 5 === 0 ? 1.5 : 1); // Larger radius for hour marks
+          circle.setAttribute('fill', 'black');
+          tickMarks.appendChild(circle);
+        }
+
+        // Function to update clock hands based on UTC time
+        function getUTCTime() {
+          const now = new Date();
+          const hours = now.getUTCHours();
+          const minutes = now.getUTCMinutes();
+          const seconds = now.getUTCSeconds();
+
+          // Calculate rotation angles
+          const hourAngle = (hours % 12) * 30 + minutes * 0.5; // 30 degrees per hour + 0.5 degrees per minute
+          const minuteAngle = minutes * 6 + seconds * 0.1; // 6 degrees per minute + 0.1 degrees per second
+          const secondAngle = seconds * 6; // 6 degrees per second
+
+          // Rotate clock hands
+          document.getElementById('hourHand').setAttribute('transform', `rotate(${hourAngle}, 50, 50)`);
+          document.getElementById('minuteHand').setAttribute('transform', `rotate(${minuteAngle}, 50, 50)`);
+          document.getElementById('secondHand').setAttribute('transform', `rotate(${secondAngle}, 50, 50)`);
+        }
+
+        // Initial call to set clock hands
+        getUTCTime();
+
+        // Update clock hands every second
+        setInterval(getUTCTime, 1000);
+      });
+    </script>
+
+    <!-- Hands -->
+    <!-- Hour hand -->
+    <path id="hourHand" d="M50 50 L50 30" stroke="black" stroke-width="3"/>
+    
+    <!-- Minute hand -->
+    <path id="minuteHand" d="M50 50 L50 20" stroke="black" stroke-width="2"/>
+    
+    <!-- Second hand -->
+    <path id="secondHand" d="M50 50 L50 15" stroke="red" stroke-width="1"/>
+
+    <!-- Center dot -->
+    <circle cx="50" cy="50" r="1" fill="black"/>
+  </svg>
+</body>
+</html>
